@@ -1,3 +1,4 @@
+import { PropertyDetails } from '@/pages/PropertyDetails';
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check, ChevronDown, Facebook, Heart, Home as HomeIcon, Instagram, LandPlot, LayoutDashboard, LogOut, Mail, MapPin, Menu, MessageCircle, Phone, Plus, Search, ShieldCheck, Sparkles, Star, TrendingUp, Twitter, User, X } from 'lucide-react';
@@ -78,6 +79,7 @@ function Portal() {
         <Route path="/" element={<HomePage properties={properties} loading={loading} />} />
         <Route path="/properties" element={<BrowsePage title="Find a place to call home" eyebrow="The collection" categories={categories} properties={properties} loading={loading} />} />
         <Route path="/land-plots" element={<BrowsePage title="Room to grow into" eyebrow="Land & plots" categories={['Land & Plots']} properties={properties} loading={loading} />} />
+        <Route path="/properties/:id" element={<PropertyDetails />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/admin" element={<AdminPage properties={properties} loading={loading} onUpdate={updateProperty} onAdd={addProperty} />} />
         <Route path="/login" element={<LoginPage />} />
