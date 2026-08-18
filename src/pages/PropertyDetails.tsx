@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, BedDouble, Building2, MapPin, MessageCircle } from 'lucide-react';
+import { ArrowLeft, BedDouble, Building2, Heart, MapPin, MessageCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { useSavedProperties } from '@/lib/useSavedProperties';
 import type { Property } from '@/types';
 
 const money = new Intl.NumberFormat('en-KE', {
@@ -19,6 +20,8 @@ export function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
+  const { savedIds, toggle } = useSavedProperties();
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     async function loadProperty() {
@@ -154,13 +157,34 @@ export function PropertyDetails() {
             </section>
 
             <aside className="h-fit rounded-2xl border border-slate-200 bg-slate-50 p-6">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Asking price
-              </p>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Asking price
+                  </p>
 
-              <p className="mt-2 text-2xl font-extrabold text-forest-900">
-                {money.format(property.price)}
-              </p>
+                  <p className="mt-2 text-2xl font-extrabold text-forest-900">
+                    {money.format(property.price)}
+                  </p>
+                </div>
+
+                <button
+                  onClick={async () => {
+                    setBusy(true);
+                    await toggle(property.id);
+                    setBusy(false);
+                  }}
+                  disabled={busy}
+                  aria-label={savedIds.has(property.id) ? 'Remove from saved' : 'Save property'}
+                  className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border transition disabled:opacity-60 ${
+                    savedIds.has(property.id)
+                      ? 'border-gold-600 bg-gold-600 text-white'
+                      : 'border-slate-200 bg-white text-slate-500 hover:border-gold-400 hover:text-gold-600'
+                  }`}
+                >
+                  <Heart size={18} fill={savedIds.has(property.id) ? 'currentColor' : 'none'} />
+                </button>
+              </div>
 
               <div className="mt-6 space-y-3">
                 {phoneNumbers.map((phone) => (
@@ -180,7 +204,7 @@ export function PropertyDetails() {
               </div>
 
               <p className="mt-4 text-center text-xs text-slate-500">
-                +254 729 711 524 · +254 763 636 363
+                +254 729 711 524 · +254 736 636 363
               </p>
             </aside>
           </div>
