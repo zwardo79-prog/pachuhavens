@@ -141,7 +141,7 @@ export function PropertyCard({
 
           <a
             href={`https://wa.me/${phone}?text=${encodeURIComponent(
-              `Hello Pachu Havens, I am interested in ${property.title}.`,
+              `Hello Pachu Haven Homes Ltd, I am interested in ${property.title}.`,
             )}`}
             target="_blank"
             rel="noreferrer"

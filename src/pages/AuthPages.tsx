@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Home as HomeIcon, Lock, Mail, User } from 'lucide-react';
+import { ArrowRight, Lock, Mail, User } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import logo from '@/assets/pachu-logo.jpeg';
 
 function AuthShell({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
@@ -11,8 +12,8 @@ function AuthShell({ title, subtitle, children }: { title: string; subtitle: str
           <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(2,44,34,.96),rgba(4,78,59,.82)),url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85')] bg-cover bg-center" />
           <div className="relative flex h-full flex-col justify-between p-10 text-white">
             <Link to="/" className="inline-flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-gold-300"><HomeIcon size={21} strokeWidth={2.5} /></span>
-              <span className="leading-none"><span className="block text-[15px] font-extrabold tracking-[0.2em]">PACHU</span><span className="mt-1 block text-[10px] font-semibold tracking-[0.38em] text-gold-300">HAVENS</span></span>
+              <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-black"><img src={logo} alt="Pachu Haven Homes Ltd" className="h-full w-full object-cover" style={{ objectPosition: '50% 40%' }} /></span>
+              <span className="leading-none"><span className="block text-[14px] font-extrabold tracking-[0.15em]">PACHU HAVEN</span><span className="mt-1 block text-[10px] font-semibold tracking-[0.3em] text-gold-300">HOMES LTD</span></span>
             </Link>
             <div>
               <p className="eyebrow text-gold-300">Your account</p>
@@ -22,7 +23,7 @@ function AuthShell({ title, subtitle, children }: { title: string; subtitle: str
           </div>
         </div>
         <div className="p-7 sm:p-10">
-          <div className="md:hidden"><Link to="/" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold-600">Pachu Havens</Link></div>
+          <div className="md:hidden"><Link to="/" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold-600">Pachu Haven Homes Ltd</Link></div>
           <h1 className="mt-2 text-2xl font-extrabold text-forest-950 md:mt-0">{title}</h1>
           <p className="mt-2 text-sm text-slate-500">{subtitle}</p>
           <div className="mt-8">{children}</div>
@@ -72,7 +73,7 @@ export function LoginPage() {
         <div className="flex justify-end"><Link to="/reset" className="text-xs font-bold text-gold-700 hover:text-gold-800">Forgot password?</Link></div>
         {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
         <button disabled={busy} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-forest-800 text-sm font-bold text-white transition hover:bg-forest-700 disabled:opacity-60">{busy ? 'Signing in...' : 'Log in'} <ArrowRight size={16} /></button>
-        <p className="text-center text-sm text-slate-500">New to Pachu Havens? <Link to="/signup" className="font-bold text-forest-800 hover:text-forest-700">Create an account</Link></p>
+        <p className="text-center text-sm text-slate-500">New to Pachu Haven Homes Ltd? <Link to="/signup" className="font-bold text-forest-800 hover:text-forest-700">Create an account</Link></p>
       </form>
     </AuthShell>
   );

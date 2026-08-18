@@ -13,7 +13,7 @@ const money = new Intl.NumberFormat('en-KE', {
 const fallbackImage =
   'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85';
 
-const phoneNumbers = ['254729711524', '254763636363'];
+const phoneNumbers = ['254729711524', '254736636363'];
 
 export function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
@@ -167,7 +167,7 @@ export function PropertyDetails() {
                   <a
                     key={phone}
                     href={`https://wa.me/${phone}?text=${encodeURIComponent(
-                      `Hello Pachu Havens, I am interested in ${property.title}.`
+                      `Hello Pachu Haven Homes Ltd, I am interested in ${property.title}.`
                     )}`}
                     target="_blank"
                     rel="noreferrer"
