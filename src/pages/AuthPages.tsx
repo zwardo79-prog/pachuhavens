@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Lock, Mail, User } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import logo from '@/assets/pachu-logo.jpeg';
+import logo from '@/assets/pachu-logo.png';
 
 function AuthShell({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
@@ -12,7 +12,7 @@ function AuthShell({ title, subtitle, children }: { title: string; subtitle: str
           <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(2,44,34,.96),rgba(4,78,59,.82)),url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85')] bg-cover bg-center" />
           <div className="relative flex h-full flex-col justify-between p-10 text-white">
             <Link to="/" className="inline-flex items-center gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl bg-black"><img src={logo} alt="Pachu Haven Homes Ltd" className="h-full w-full object-cover" style={{ objectPosition: '50% 40%' }} /></span>
+              <img src={logo} alt="Pachu Haven Homes Ltd" className="h-11 w-11 shrink-0 object-contain" />
               <span className="leading-none"><span className="block text-[14px] font-extrabold tracking-[0.15em]">PACHU HAVEN</span><span className="mt-1 block text-[10px] font-semibold tracking-[0.3em] text-gold-300">HOMES LTD</span></span>
             </Link>
             <div>

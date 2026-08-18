@@ -35,7 +35,7 @@ export function useSavedProperties() {
   const mergedForUserId = useRef<string | null>(null);
 
   const loadFromSupabase = useCallback(async (userId: string) => {
-    const { data, error } = await supabase.from('saved_properties').select('property_id').eq('user_id', userId);
+    const { data, error } = await supabase.from('favorites').select('property_id').eq('user_id', userId);
     if (error) return new Set<string>();
     return new Set((data ?? []).map((row) => row.property_id as string));
   }, []);
@@ -53,7 +53,7 @@ export function useSavedProperties() {
       const guestIds = readGuestSaved();
       if (guestIds.size > 0) {
         const rows = Array.from(guestIds).map((property_id) => ({ user_id: user.id, property_id }));
-        await supabase.from('saved_properties').upsert(rows, { onConflict: 'user_id,property_id', ignoreDuplicates: true });
+        await supabase.from('favorites').upsert(rows, { onConflict: 'user_id,property_id', ignoreDuplicates: true });
         writeGuestSaved(new Set());
       }
       mergedForUserId.current = user.id;
@@ -80,7 +80,7 @@ export function useSavedProperties() {
     }
 
     if (isSaved) {
-      const { error } = await supabase.from('saved_properties').delete().eq('user_id', user.id).eq('property_id', propertyId);
+      const { error } = await supabase.from('favorites').delete().eq('user_id', user.id).eq('property_id', propertyId);
       if (error) return 'error';
       setSavedIds((current) => {
         const next = new Set(current);
@@ -89,7 +89,7 @@ export function useSavedProperties() {
       });
       return 'removed';
     }
-    const { error } = await supabase.from('saved_properties').insert({ user_id: user.id, property_id: propertyId });
+    const { error } = await supabase.from('favorites').insert({ user_id: user.id, property_id: propertyId });
     if (error) return 'error';
     setSavedIds((current) => new Set(current).add(propertyId));
     return 'saved';
