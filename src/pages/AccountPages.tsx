@@ -110,15 +110,11 @@ export function ProfilePage() {
 
 export function SavedListingsPage() {
   const { user } = useAuth();
-  const { savedIds, loading, toggle } = useSavedProperties();
+  const { savedIds, loading, toggle, isGuest } = useSavedProperties();
   const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [propertiesLoading, setPropertiesLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      setPropertiesLoading(false);
-      return;
-    }
     if (savedIds.size === 0) {
       setAllProperties([]);
       setPropertiesLoading(false);
@@ -130,20 +126,7 @@ export function SavedListingsPage() {
       setAllProperties((data ?? []) as Property[]);
       setPropertiesLoading(false);
     })();
-  }, [user, savedIds]);
-
-  if (!user) {
-    return (
-      <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
-          <Heart className="mx-auto text-slate-300" size={32} />
-          <h1 className="mt-4 text-2xl font-extrabold text-forest-950">Log in to see your saved listings</h1>
-          <p className="mt-2 text-sm text-slate-500">Tap the heart on any property to keep it here.</p>
-          <Link to="/login" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-forest-800 px-5 py-3 text-sm font-bold text-white transition hover:bg-forest-700">Log in <ArrowRight size={16} /></Link>
-        </div>
-      </main>
-    );
-  }
+  }, [savedIds]);
 
   const saved = allProperties.filter((property) => savedIds.has(property.id));
 
@@ -152,6 +135,13 @@ export function SavedListingsPage() {
       <p className="eyebrow">Your collection</p>
       <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-forest-950">Saved listings</h1>
       <p className="mt-3 text-slate-500">{saved.length} {saved.length === 1 ? 'property' : 'properties'} you have kept for later.</p>
+
+      {isGuest && !user && (
+        <div className="mt-6 flex flex-col items-start justify-between gap-3 rounded-2xl border border-gold-200 bg-gold-50 px-5 py-4 sm:flex-row sm:items-center">
+          <p className="text-sm text-forest-900"><span className="font-bold">Saved on this device.</span> Log in to sync your saved listings across devices.</p>
+          <Link to="/login" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-forest-800 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-forest-700">Log in <ArrowRight size={16} /></Link>
+        </div>
+      )}
 
       {loading || propertiesLoading ? (
         <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{[1, 2, 3].map((item) => <div key={item} className="h-[440px] animate-pulse rounded-2xl bg-slate-200" />)}</div>

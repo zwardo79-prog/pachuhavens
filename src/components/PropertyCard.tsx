@@ -18,15 +18,13 @@ const phone = '254729711524';
 interface PropertyCardProps {
   property: Property;
   saved?: boolean;
-  onToggle?: (id: string) => Promise<'saved' | 'removed' | 'unauthorized' | 'error'>;
-  onUnauthenticated?: () => void;
+  onToggle?: (id: string) => Promise<'saved' | 'removed' | 'error'>;
 }
 
 export function PropertyCard({
   property,
   saved = false,
   onToggle,
-  onUnauthenticated,
 }: PropertyCardProps) {
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
@@ -42,13 +40,7 @@ export function PropertyCard({
     if (!onToggle) return;
 
     setBusy(true);
-
-    const result = await onToggle(property.id);
-
-    if (result === 'unauthorized' && onUnauthenticated) {
-      onUnauthenticated();
-    }
-
+    await onToggle(property.id);
     setBusy(false);
   }
 

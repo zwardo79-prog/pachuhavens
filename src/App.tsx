@@ -198,11 +198,9 @@ function HomePage({ properties, loading }: { properties: Property[]; loading: bo
 }
 
 function PropertyCardWithHeart({ property }: { property: Property }) {
-  const { user } = useAuth();
   const { savedIds, toggle } = useSavedProperties();
-  const navigate = useNavigate();
   const saved = savedIds.has(property.id);
-  return <PropertyCard property={property} saved={saved} onToggle={toggle} onUnauthenticated={() => navigate('/login')} />;
+  return <PropertyCard property={property} saved={saved} onToggle={toggle} />;
 }
 
 function SelectField({ label, value, options, onChange }: { label: string; value: string; options: string[]; onChange: (value: string) => void }) { return <label className="relative block text-xs font-bold uppercase tracking-wider text-slate-400">{label}<select value={value} onChange={(e) => onChange(e.target.value)} className="mt-2 w-full appearance-none bg-transparent pr-5 text-sm font-semibold normal-case tracking-normal text-slate-800 outline-none">{options.map((option) => <option key={option}>{option}</option>)}</select><ChevronDown size={15} className="pointer-events-none absolute bottom-1 right-1 text-slate-400" /></label>; }
