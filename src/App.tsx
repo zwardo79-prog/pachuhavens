@@ -1,7 +1,7 @@
 import { PropertyDetails } from '@/pages/PropertyDetails';
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
-import { ArrowRight, Check, ChevronDown, Facebook, Heart, Instagram, LandPlot, LayoutDashboard, LogOut, Mail, MapPin, Menu, MessageCircle, Phone, Plus, Search, ShieldCheck, Sparkles, Star, TrendingUp, Twitter, User, X } from 'lucide-react';
+import { ArrowRight, Check, ChevronDown, Facebook, Heart, Instagram, LandPlot, LayoutDashboard, LogOut, Mail, MapPin, Menu, MessageCircle, Pencil, Phone, Plus, Search, ShieldCheck, Sparkles, Star, Trash2, TrendingUp, Twitter, Upload, User, X } from 'lucide-react';
 import logo from '@/assets/pachu-logo.png';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
 import { AuthProvider, useAuth } from '@/lib/auth';
@@ -72,6 +72,16 @@ function Portal() {
     setProperties((current) => [data as Property, ...current]);
   }
 
+  async function deleteProperty(id: string) {
+    const previous = properties;
+    setProperties((current) => current.filter((property) => property.id !== id));
+    const { error } = await supabase.from('properties').delete().eq('id', id);
+    if (error) {
+      setProperties(previous);
+      setDataError('That listing could not be deleted. Please try again.');
+    }
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Header />
@@ -82,7 +92,7 @@ function Portal() {
         <Route path="/land-plots" element={<BrowsePage title="Room to grow into" eyebrow="Land & plots" categories={['Land & Plots']} properties={properties} loading={loading} />} />
         <Route path="/properties/:id" element={<PropertyDetails />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/admin" element={<AdminPage properties={properties} loading={loading} onUpdate={updateProperty} onAdd={addProperty} />} />
+        <Route path="/admin" element={<AdminPage properties={properties} loading={loading} onUpdate={updateProperty} onAdd={addProperty} onDelete={deleteProperty} />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/reset" element={<ResetPage />} />
@@ -218,9 +228,97 @@ function BrowsePage({ title, eyebrow, categories: pageCategories, properties, lo
 
 function AboutPage() { return <main><section className="bg-forest-950 px-4 py-20 text-white sm:px-6 lg:px-8 lg:py-28"><div className="mx-auto max-w-7xl"><p className="eyebrow text-gold-300">A better way home</p><h1 className="mt-4 max-w-3xl text-4xl font-extrabold leading-tight sm:text-6xl">Property decisions made with <span className="text-gold-300">more humanity.</span></h1><p className="mt-7 max-w-xl text-lg leading-8 text-emerald-50/75">Pachu Haven Homes Ltd is a Kenya-first property partner for people buying, selling, and building the next chapter of their lives.</p></div></section><section className="mx-auto grid max-w-7xl gap-14 px-4 py-16 sm:px-6 md:grid-cols-2 md:items-center lg:px-8 lg:py-24"><img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=85" alt="Modern home interior" className="rounded-3xl object-cover shadow-xl" /><div><p className="eyebrow">Our point of view</p><h2 className="mt-3 text-3xl font-extrabold text-forest-950">The right space changes how life feels.</h2><p className="mt-5 leading-8 text-slate-500">We believe the property journey should feel informed, personal, and calm. That means honest listings, thoughtful presentation, and a team that understands the places we call home.</p><div className="mt-8 grid gap-5 sm:grid-cols-2"><TrustItem icon={<MapPin />} title="Local by nature" text="Deep knowledge of Kenya's most promising neighborhoods." /><TrustItem icon={<Star />} title="Carefully curated" text="Quality over quantity in every collection we share." /></div></div></section><section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8"><p className="eyebrow">Visit us</p><h2 className="mt-3 text-3xl font-extrabold text-forest-950">Our offices</h2><div className="mt-8 grid gap-5 sm:grid-cols-3">{[['Nakuru', 'Opposite Lands Office, opposite Judiciary'], ['Gilgil', 'Gilgil town'], ['Naivasha', 'Naivasha town']].map(([town, detail]) => <div key={town} className="rounded-2xl border border-slate-200 bg-white p-6"><span className="grid h-10 w-10 place-items-center rounded-xl bg-forest-50 text-gold-600"><MapPin size={18} /></span><h3 className="mt-4 text-lg font-extrabold text-forest-950">{town}</h3><p className="mt-1 text-sm text-slate-500">{detail}</p></div>)}</div></section></main>; }
 
-function AdminPage({ properties, loading, onUpdate, onAdd }: { properties: Property[]; loading: boolean; onUpdate: (id: string, changes: Partial<Property>) => Promise<void>; onAdd: (draft: PropertyDraft) => Promise<void> }) { const [tab, setTab] = useState<'All' | PropertyStatus>('All'); const [showModal, setShowModal] = useState(false); const filtered = tab === 'All' ? properties : properties.filter((p) => p.status === tab); const count = (value: PropertyStatus) => properties.filter((p) => p.status === value).length; return <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="eyebrow">Operations center</p><h1 className="mt-3 text-4xl font-extrabold tracking-tight text-forest-950">Listing dashboard</h1><p className="mt-3 text-slate-500">Keep your property collection current and ready for the next conversation.</p></div><button onClick={() => setShowModal(true)} className="flex items-center justify-center gap-2 rounded-xl bg-forest-800 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-forest-900/10 transition hover:bg-forest-700"><Plus size={17} /> Add new property</button></div><div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><Metric title="Total listings" value={properties.length} icon={<LayoutDashboard />} tone="neutral" /><Metric title="Available" value={count('Available')} icon={<Check />} tone="green" /><Metric title="Pending" value={count('Pending')} icon={<Sparkles />} tone="gold" /><Metric title="Sold" value={count('Sold')} icon={<ShieldCheck />} tone="slate" /></div><section className="mt-10 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"><div className="flex flex-wrap items-center gap-2 border-b border-slate-100 px-5 py-4">{(['All', ...statuses] as const).map((item) => <button key={item} onClick={() => setTab(item)} className={`rounded-lg px-4 py-2 text-sm font-bold transition ${tab === item ? 'bg-forest-800 text-white' : 'text-slate-500 hover:bg-slate-100'}`}>{item}</button>)}</div>{loading ? <div className="p-8 text-sm text-slate-500">Loading listings...</div> : <div className="overflow-x-auto"><table className="w-full min-w-[760px] text-left"><thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-400"><tr><th className="px-5 py-4">Property</th><th className="px-5 py-4">Location</th><th className="px-5 py-4">Price</th><th className="px-5 py-4">Category</th><th className="px-5 py-4">Status</th></tr></thead><tbody className="divide-y divide-slate-100">{filtered.map((property) => <tr key={property.id} className="text-sm"><td className="px-5 py-4"><div className="flex items-center gap-3"><img src={property.image_url || fallbackImage} alt="" className="h-10 w-12 rounded-lg object-cover" /><div><p className="font-bold text-slate-800">{property.title}</p><p className="mt-1 text-xs text-slate-400">#{property.id.slice(0, 8)}</p></div></div></td><td className="px-5 py-4 text-slate-500">{property.location}</td><td className="px-5 py-4 font-bold text-forest-900">{money.format(property.price)}</td><td className="px-5 py-4 text-slate-500">{property.category}</td><td className="px-5 py-4"><select value={property.status} onChange={(e) => void onUpdate(property.id, { status: e.target.value as PropertyStatus })} className={`rounded-lg border-0 px-3 py-2 text-xs font-bold outline-none ${property.status === 'Available' ? 'bg-emerald-50 text-emerald-700' : property.status === 'Pending' ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-600'}`}>{statuses.map((item) => <option key={item}>{item}</option>)}</select></td></tr>)}</tbody></table>{!filtered.length && <div className="p-10 text-center text-sm text-slate-500">No listings in this status yet.</div>}</div>}</section>{showModal && <AddPropertyModal onClose={() => setShowModal(false)} onAdd={async (draft) => { await onAdd(draft); setShowModal(false); }} />}</main>; }
+function AdminPage({ properties, loading, onUpdate, onAdd, onDelete }: { properties: Property[]; loading: boolean; onUpdate: (id: string, changes: Partial<Property>) => Promise<void>; onAdd: (draft: PropertyDraft) => Promise<void>; onDelete: (id: string) => Promise<void> }) {
+  const [tab, setTab] = useState<'All' | PropertyStatus>('All');
+  const [showModal, setShowModal] = useState(false);
+  const [editing, setEditing] = useState<Property | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const filtered = tab === 'All' ? properties : properties.filter((p) => p.status === tab);
+  const count = (value: PropertyStatus) => properties.filter((p) => p.status === value).length;
+
+  async function handleDelete(property: Property) {
+    if (!window.confirm(`Delete "${property.title}"? This can't be undone.`)) return;
+    setDeletingId(property.id);
+    await onDelete(property.id);
+    setDeletingId(null);
+  }
+
+  return <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="eyebrow">Operations center</p><h1 className="mt-3 text-4xl font-extrabold tracking-tight text-forest-950">Listing dashboard</h1><p className="mt-3 text-slate-500">Keep your property collection current and ready for the next conversation.</p></div><button onClick={() => setShowModal(true)} className="flex items-center justify-center gap-2 rounded-xl bg-forest-800 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-forest-900/10 transition hover:bg-forest-700"><Plus size={17} /> Add new property</button></div><div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><Metric title="Total listings" value={properties.length} icon={<LayoutDashboard />} tone="neutral" /><Metric title="Available" value={count('Available')} icon={<Check />} tone="green" /><Metric title="Pending" value={count('Pending')} icon={<Sparkles />} tone="gold" /><Metric title="Sold" value={count('Sold')} icon={<ShieldCheck />} tone="slate" /></div><section className="mt-10 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"><div className="flex flex-wrap items-center gap-2 border-b border-slate-100 px-5 py-4">{(['All', ...statuses] as const).map((item) => <button key={item} onClick={() => setTab(item)} className={`rounded-lg px-4 py-2 text-sm font-bold transition ${tab === item ? 'bg-forest-800 text-white' : 'text-slate-500 hover:bg-slate-100'}`}>{item}</button>)}</div>{loading ? <div className="p-8 text-sm text-slate-500">Loading listings...</div> : <div className="overflow-x-auto"><table className="w-full min-w-[840px] text-left"><thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-400"><tr><th className="px-5 py-4">Property</th><th className="px-5 py-4">Location</th><th className="px-5 py-4">Price</th><th className="px-5 py-4">Category</th><th className="px-5 py-4">Status</th><th className="px-5 py-4 text-right">Actions</th></tr></thead><tbody className="divide-y divide-slate-100">{filtered.map((property) => <tr key={property.id} className="text-sm"><td className="px-5 py-4"><div className="flex items-center gap-3"><img src={property.image_url || fallbackImage} alt="" className="h-10 w-12 rounded-lg object-cover" /><div><p className="font-bold text-slate-800">{property.title}</p><p className="mt-1 text-xs text-slate-400">#{property.id.slice(0, 8)}</p></div></div></td><td className="px-5 py-4 text-slate-500">{property.location}</td><td className="px-5 py-4 font-bold text-forest-900">{money.format(property.price)}</td><td className="px-5 py-4 text-slate-500">{property.category}</td><td className="px-5 py-4"><select value={property.status} onChange={(e) => void onUpdate(property.id, { status: e.target.value as PropertyStatus })} className={`rounded-lg border-0 px-3 py-2 text-xs font-bold outline-none ${property.status === 'Available' ? 'bg-emerald-50 text-emerald-700' : property.status === 'Pending' ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-600'}`}>{statuses.map((item) => <option key={item}>{item}</option>)}</select></td><td className="px-5 py-4"><div className="flex items-center justify-end gap-2"><button onClick={() => setEditing(property)} aria-label="Edit property" className="grid h-9 w-9 place-items-center rounded-lg text-slate-400 transition hover:bg-forest-50 hover:text-forest-800"><Pencil size={16} /></button><button onClick={() => void handleDelete(property)} disabled={deletingId === property.id} aria-label="Delete property" className="grid h-9 w-9 place-items-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"><Trash2 size={16} /></button></div></td></tr>)}</tbody></table>{!filtered.length && <div className="p-10 text-center text-sm text-slate-500">No listings in this status yet.</div>}</div>}</section>{showModal && <PropertyFormModal title="Add a property" submitLabel="Publish property" onClose={() => setShowModal(false)} onSubmit={async (draft) => { await onAdd(draft); setShowModal(false); }} />}{editing && <PropertyFormModal title="Edit property" submitLabel="Save changes" initial={editing} onClose={() => setEditing(null)} onSubmit={async (draft) => { await onUpdate(editing.id, draft); setEditing(null); }} />}</main>;
+}
 function Metric({ title, value, icon, tone }: { title: string; value: number; icon: ReactNode; tone: 'neutral' | 'green' | 'gold' | 'slate' }) { const styles = { neutral: 'bg-white text-forest-800', green: 'bg-emerald-50 text-emerald-700', gold: 'bg-amber-50 text-amber-700', slate: 'bg-slate-100 text-slate-600' }; return <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div className="flex items-center justify-between"><span className={`grid h-10 w-10 place-items-center rounded-xl ${styles[tone]}`}>{icon}</span><span className="text-3xl font-extrabold text-slate-900">{value}</span></div><p className="mt-5 text-sm font-semibold text-slate-500">{title}</p></div>; }
-function AddPropertyModal({ onClose, onAdd }: { onClose: () => void; onAdd: (draft: PropertyDraft) => Promise<void> }) { const [form, setForm] = useState<PropertyDraft>({ title: '', location: '', price: 0, category: 'Houses', status: 'Available', image_url: fallbackImage, beds: 0, baths: 0, size: '', description: '' }); const [saving, setSaving] = useState(false); const [error, setError] = useState(''); const update = (key: keyof PropertyDraft, value: string | number) => setForm((current) => ({ ...current, [key]: value })); async function submit(event: FormEvent) { event.preventDefault(); setSaving(true); setError(''); try { await onAdd(form); } catch { setError('Please fill in the required details and try again.'); } finally { setSaving(false); } } return <div className="fixed inset-0 z-50 flex items-end justify-center bg-forest-950/60 p-0 backdrop-blur-sm sm:items-center sm:p-4"><div className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-3xl bg-white p-6 sm:rounded-3xl sm:p-8"><div className="flex items-start justify-between"><div><p className="eyebrow">New listing</p><h2 className="mt-2 text-2xl font-extrabold text-forest-950">Add a property</h2></div><button onClick={onClose} className="rounded-full p-2 text-slate-400 hover:bg-slate-100"><X size={20} /></button></div><form onSubmit={submit} className="mt-7 grid gap-4 sm:grid-cols-2"><FormField label="Title" value={form.title} onChange={(value) => update('title', value)} required /><FormField label="Location" value={form.location} onChange={(value) => update('location', value)} required /><FormField label="Price (KSh)" value={form.price || ''} type="number" onChange={(value) => update('price', Number(value))} required /><SelectField label="Category" value={form.category} options={categories} onChange={(value) => update('category', value as PropertyCategory)} /><FormField label="Size / specs" value={form.size} onChange={(value) => update('size', value)} required /><SelectField label="Status" value={form.status} options={[...statuses]} onChange={(value) => update('status', value as PropertyStatus)} /><div className="sm:col-span-2"><FormField label="Image URL" value={form.image_url} onChange={(value) => update('image_url', value)} /></div><div className="sm:col-span-2"><label className="text-xs font-bold uppercase tracking-wider text-slate-400">Description<textarea value={form.description} onChange={(e) => update('description', e.target.value)} rows={3} className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-forest-700" /></label></div>{error && <p className="sm:col-span-2 text-sm text-red-600">{error}</p>}<button disabled={saving} className="sm:col-span-2 mt-2 flex h-12 items-center justify-center gap-2 rounded-xl bg-forest-800 text-sm font-bold text-white transition hover:bg-forest-700 disabled:opacity-60">{saving ? 'Saving...' : 'Publish property'} <ArrowRight size={16} /></button></form></div></div>; }
+function ImageUploader({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  async function handleFile(file: File) {
+    setUploading(true);
+    setError('');
+    try {
+      const ext = file.name.split('.').pop() || 'jpg';
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from('property-images').upload(path, file, { upsert: false });
+      if (uploadError) throw uploadError;
+      const { data } = supabase.storage.from('property-images').getPublicUrl(path);
+      onChange(data.publicUrl);
+    } catch {
+      setError('Upload failed. Please try a different image.');
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div className="sm:col-span-2">
+      <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo</label>
+      <div className="mt-2 flex items-center gap-4">
+        <img src={value || fallbackImage} alt="" className="h-20 w-28 shrink-0 rounded-xl border border-slate-200 object-cover" />
+        <div className="flex-1">
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => { const file = e.target.files?.[0]; if (file) void handleFile(file); }}
+          />
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-forest-800 transition hover:border-forest-300 hover:bg-forest-50 disabled:opacity-60"
+          >
+            <Upload size={15} /> {uploading ? 'Uploading...' : value ? 'Change photo' : 'Upload photo'}
+          </button>
+          {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PropertyFormModal({ initial, onClose, onSubmit, title, submitLabel }: { initial?: Property; onClose: () => void; onSubmit: (draft: PropertyDraft) => Promise<void>; title: string; submitLabel: string }) {
+  const [form, setForm] = useState<PropertyDraft>(initial ? {
+    title: initial.title, location: initial.location, price: initial.price, category: initial.category,
+    status: initial.status, image_url: initial.image_url, beds: initial.beds, baths: initial.baths,
+    size: initial.size, description: initial.description,
+  } : { title: '', location: '', price: 0, category: 'Houses', status: 'Available', image_url: fallbackImage, beds: 0, baths: 0, size: '', description: '' });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const update = (key: keyof PropertyDraft, value: string | number) => setForm((current) => ({ ...current, [key]: value }));
+  async function submit(event: FormEvent) {
+    event.preventDefault();
+    setSaving(true);
+    setError('');
+    try {
+      await onSubmit(form);
+    } catch {
+      setError('Please fill in the required details and try again.');
+    } finally {
+      setSaving(false);
+    }
+  }
+  return <div className="fixed inset-0 z-50 flex items-end justify-center bg-forest-950/60 p-0 backdrop-blur-sm sm:items-center sm:p-4"><div className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-3xl bg-white p-6 sm:rounded-3xl sm:p-8"><div className="flex items-start justify-between"><div><p className="eyebrow">{initial ? 'Edit listing' : 'New listing'}</p><h2 className="mt-2 text-2xl font-extrabold text-forest-950">{title}</h2></div><button onClick={onClose} className="rounded-full p-2 text-slate-400 hover:bg-slate-100"><X size={20} /></button></div><form onSubmit={submit} className="mt-7 grid gap-4 sm:grid-cols-2"><FormField label="Title" value={form.title} onChange={(value) => update('title', value)} required /><FormField label="Location" value={form.location} onChange={(value) => update('location', value)} required /><FormField label="Price (KSh)" value={form.price || ''} type="number" onChange={(value) => update('price', Number(value))} required /><SelectField label="Category" value={form.category} options={categories} onChange={(value) => update('category', value as PropertyCategory)} /><FormField label="Size / specs" value={form.size} onChange={(value) => update('size', value)} required /><SelectField label="Status" value={form.status} options={[...statuses]} onChange={(value) => update('status', value as PropertyStatus)} /><ImageUploader value={form.image_url} onChange={(url) => update('image_url', url)} /><div className="sm:col-span-2"><label className="text-xs font-bold uppercase tracking-wider text-slate-400">Description<textarea value={form.description} onChange={(e) => update('description', e.target.value)} rows={3} className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-forest-700" /></label></div>{error && <p className="sm:col-span-2 text-sm text-red-600">{error}</p>}<button disabled={saving} className="sm:col-span-2 mt-2 flex h-12 items-center justify-center gap-2 rounded-xl bg-forest-800 text-sm font-bold text-white transition hover:bg-forest-700 disabled:opacity-60">{saving ? 'Saving...' : submitLabel} <ArrowRight size={16} /></button></form></div></div>;
+}
 function FormField({ label, value, onChange, type = 'text', required = false }: { label: string; value: string | number; onChange: (value: string) => void; type?: string; required?: boolean }) { return <label className="text-xs font-bold uppercase tracking-wider text-slate-400">{label}<input required={required} type={type} value={value} onChange={(e) => onChange(e.target.value)} className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm font-medium text-slate-800 outline-none transition focus:border-forest-700 focus:ring-2 focus:ring-forest-100" /></label>; }
 
 function Footer() { return <footer className="bg-forest-950 text-white"><div className="mx-auto grid max-w-7xl gap-12 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1.1fr] lg:px-8"><div><Link to="/" className="inline-flex items-center gap-3"><img src={logo} alt="Pachu Haven Homes Ltd" className="h-11 w-11 shrink-0 object-contain" /><span className="leading-none"><span className="block text-[14px] font-extrabold tracking-[0.15em]">PACHU HAVEN</span><span className="mt-1 block text-[10px] font-semibold tracking-[0.3em] text-gold-300">HOMES LTD</span></span></Link><p className="mt-6 max-w-xs text-sm leading-6 text-emerald-100/60">A considered way to find your next home, plot, or place to build in Kenya.</p><div className="mt-6 flex gap-2"><SocialIcon icon={<Instagram size={16} />} href="https://www.instagram.com/pachuhavenhomesltd" label="Instagram" /><SocialIcon icon={<Facebook size={16} />} href="https://www.facebook.com/pachuhavenhomesltd" label="Facebook" /><SocialIcon icon={<Twitter size={16} />} href="https://www.x.com/pachuhavenhomesltd" label="X (Twitter)" /></div></div><FooterColumn title="Explore" links={[['Properties', '/properties'], ['Land & Plots', '/land-plots'], ['About Us', '/about'], ['Saved listings', '/saved'], ['Admin Dashboard', '/admin']]} /><div><h3 className="text-sm font-bold text-gold-300">Get in touch</h3><div className="mt-5 space-y-4 text-sm text-emerald-100/70"><p className="flex items-center gap-3"><Phone size={15} /> +254 729 711 524</p><p className="flex items-center gap-3"><Phone size={15} /> +254 736 636 363</p><p className="flex items-center gap-3"><Mail size={15} /> hello@pachuhavens.co.ke</p><p className="flex items-start gap-3"><MapPin size={15} className="mt-0.5 shrink-0" /> Nakuru — opp. Lands Office, opp. Judiciary</p><p className="flex items-start gap-3"><MapPin size={15} className="mt-0.5 shrink-0" /> Gilgil</p><p className="flex items-start gap-3"><MapPin size={15} className="mt-0.5 shrink-0" /> Naivasha</p></div></div></div><div className="border-t border-white/10 px-4 py-5 text-center text-xs text-emerald-100/40 sm:px-6">© 2024 Pachu Haven Homes Ltd. Spaces with a little more soul.</div></footer>; }
