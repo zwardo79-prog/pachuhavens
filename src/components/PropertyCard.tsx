@@ -66,13 +66,13 @@ export function PropertyCard({
               ? 'bg-emerald-100 text-emerald-800'
               : property.status === 'Pending'
                 ? 'bg-amber-100 text-amber-800'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-200'
           }`}
         >
           {property.status}
         </span>
 
-        <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-bold text-slate-600 dark:text-slate-300 backdrop-blur-sm">
+        <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-bold text-slate-600 dark:text-slate-200 backdrop-blur-sm">
           {property.category}
         </span>
 
@@ -84,7 +84,7 @@ export function PropertyCard({
             className={`absolute bottom-4 right-4 grid h-10 w-10 place-items-center rounded-full backdrop-blur-md transition disabled:opacity-60 ${
               saved
                 ? 'bg-gold-600 text-white'
-                : 'bg-white/90 text-slate-600 dark:text-slate-300 hover:bg-white hover:text-gold-600'
+                : 'bg-white/90 text-slate-600 dark:text-slate-200 hover:bg-white hover:text-gold-600'
             }`}
           >
             <Heart size={18} fill={saved ? 'currentColor' : 'none'} />
@@ -99,14 +99,14 @@ export function PropertyCard({
             {property.title}
           </h3>
 
-            <p className="mt-1 flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+            <p className="mt-1 flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-300">
               <MapPin size={13} className="text-gold-600" />
               {property.location}
             </p>
           </div>
         </div>
 
-        <p className="min-h-10 text-sm leading-5 text-slate-500 dark:text-slate-400">
+        <p className="min-h-10 text-sm leading-5 text-slate-500 dark:text-slate-300">
           {property.description}
         </p>
 
@@ -116,7 +116,7 @@ export function PropertyCard({
         >
          View property details
        </Link>
-        <div className="my-4 flex items-center gap-4 border-y border-slate-100 dark:border-slate-800 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400">
+        <div className="my-4 flex items-center gap-4 border-y border-slate-100 dark:border-slate-800 py-3 text-xs font-semibold text-slate-500 dark:text-slate-300">
           {property.beds > 0 && (
             <span className="flex items-center gap-1.5">
               <BedDouble size={15} />

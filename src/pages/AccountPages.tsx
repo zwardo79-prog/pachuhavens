@@ -46,7 +46,7 @@ export function ProfilePage() {
         <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-6 py-16 text-center">
           <p className="eyebrow">Account</p>
           <h1 className="mt-3 text-2xl font-extrabold text-forest-950 dark:text-white">Please log in to view your profile</h1>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Your saved properties and account details live here.</p>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">Your saved properties and account details live here.</p>
           <Link to="/login" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-forest-800 px-5 py-3 text-sm font-bold text-white transition hover:bg-forest-700">Log in <ArrowRight size={16} /></Link>
         </div>
       </main>
@@ -57,25 +57,25 @@ export function ProfilePage() {
     <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <p className="eyebrow">Your account</p>
       <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-forest-950 dark:text-white">Profile</h1>
-      <p className="mt-3 text-slate-500 dark:text-slate-400">Manage your details and saved spaces in one place.</p>
+      <p className="mt-3 text-slate-500 dark:text-slate-300">Manage your details and saved spaces in one place.</p>
 
       <div className="mt-10 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <section className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm sm:p-8">
           <h2 className="text-lg font-extrabold text-slate-900">Edit your details</h2>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Update the name shown across your account.</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">Update the name shown across your account.</p>
           <form onSubmit={submit} className="mt-6 space-y-5">
             <label className="block">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Full name</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400">Full name</span>
               <div className="relative mt-2">
-                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"><User size={16} /></span>
+                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400"><User size={16} /></span>
                 <input value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full rounded-xl border border-slate-200 dark:border-slate-800 py-3 pl-10 pr-3 text-sm font-medium text-slate-800 dark:text-slate-100 outline-none transition focus:border-forest-700 focus:ring-2 focus:ring-forest-100" />
               </div>
             </label>
             <label className="block">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Email</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400">Email</span>
               <div className="relative mt-2">
-                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"><Mail size={16} /></span>
-                <input value={user.email ?? ''} disabled className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 py-3 pl-10 pr-3 text-sm font-medium text-slate-400 dark:text-slate-500 outline-none" />
+                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400"><Mail size={16} /></span>
+                <input value={user.email ?? ''} disabled className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 py-3 pl-10 pr-3 text-sm font-medium text-slate-400 dark:text-slate-400 outline-none" />
               </div>
             </label>
             {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
@@ -90,18 +90,18 @@ export function ProfilePage() {
           <section className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
             <h2 className="text-lg font-extrabold text-slate-900">Account summary</h2>
             <dl className="mt-5 space-y-4 text-sm">
-              <div className="flex items-center justify-between"><dt className="text-slate-500 dark:text-slate-400">Name</dt><dd className="font-bold text-slate-800 dark:text-slate-100">{profile?.full_name || 'Not set yet'}</dd></div>
-              <div className="flex items-center justify-between"><dt className="text-slate-500 dark:text-slate-400">Email</dt><dd className="max-w-[180px] truncate font-bold text-slate-800 dark:text-slate-100">{user.email}</dd></div>
-              <div className="flex items-center justify-between"><dt className="text-slate-500 dark:text-slate-400">Member since</dt><dd className="font-bold text-slate-800 dark:text-slate-100">{new Date(profile?.created_at ?? user.created_at).toLocaleDateString('en-KE', { year: 'numeric', month: 'long' })}</dd></div>
+              <div className="flex items-center justify-between"><dt className="text-slate-500 dark:text-slate-300">Name</dt><dd className="font-bold text-slate-800 dark:text-slate-100">{profile?.full_name || 'Not set yet'}</dd></div>
+              <div className="flex items-center justify-between"><dt className="text-slate-500 dark:text-slate-300">Email</dt><dd className="max-w-[180px] truncate font-bold text-slate-800 dark:text-slate-100">{user.email}</dd></div>
+              <div className="flex items-center justify-between"><dt className="text-slate-500 dark:text-slate-300">Member since</dt><dd className="font-bold text-slate-800 dark:text-slate-100">{new Date(profile?.created_at ?? user.created_at).toLocaleDateString('en-KE', { year: 'numeric', month: 'long' })}</dd></div>
             </dl>
           </section>
           <Link to="/saved" className="block rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm transition hover:border-forest-300 hover:shadow-md">
             <div className="flex items-center gap-3">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-gold-50 text-gold-700"><Heart size={18} /></span>
-              <div><p className="font-extrabold text-slate-900">Saved listings</p><p className="text-sm text-slate-500 dark:text-slate-400">{savedIds.size} {savedIds.size === 1 ? 'property' : 'properties'} saved</p></div>
+              <div><p className="font-extrabold text-slate-900">Saved listings</p><p className="text-sm text-slate-500 dark:text-slate-300">{savedIds.size} {savedIds.size === 1 ? 'property' : 'properties'} saved</p></div>
             </div>
           </Link>
-          <button onClick={handleSignOut} className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-3.5 text-sm font-bold text-slate-600 dark:text-slate-300 shadow-sm transition hover:border-red-200 hover:text-red-600"><LogOut size={16} /> Log out</button>
+          <button onClick={handleSignOut} className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-3.5 text-sm font-bold text-slate-600 dark:text-slate-200 shadow-sm transition hover:border-red-200 hover:text-red-600"><LogOut size={16} /> Log out</button>
         </aside>
       </div>
     </main>
@@ -134,7 +134,7 @@ export function SavedListingsPage() {
     <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <p className="eyebrow">Your collection</p>
       <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-forest-950 dark:text-white">Saved listings</h1>
-      <p className="mt-3 text-slate-500 dark:text-slate-400">{saved.length} {saved.length === 1 ? 'property' : 'properties'} you have kept for later.</p>
+      <p className="mt-3 text-slate-500 dark:text-slate-300">{saved.length} {saved.length === 1 ? 'property' : 'properties'} you have kept for later.</p>
 
       {isGuest && !user && (
         <div className="mt-6 flex flex-col items-start justify-between gap-3 rounded-2xl border border-gold-200 bg-gold-50 px-5 py-4 sm:flex-row sm:items-center">
@@ -151,7 +151,7 @@ export function SavedListingsPage() {
         <div className="mt-10 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-6 py-16 text-center">
           <Heart className="mx-auto text-slate-300" size={32} />
           <h2 className="mt-4 text-lg font-extrabold text-slate-800 dark:text-slate-100">No saved listings yet</h2>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Tap the heart icon on any property to save it here for later.</p>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">Tap the heart icon on any property to save it here for later.</p>
           <Link to="/properties" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-forest-800 px-5 py-3 text-sm font-bold text-white transition hover:bg-forest-700">Browse properties <ArrowRight size={16} /></Link>
         </div>
       )}

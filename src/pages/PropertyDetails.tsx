@@ -50,7 +50,7 @@ export function PropertyDetails() {
     return (
       <main className="min-h-screen bg-slate-50 dark:bg-slate-800 px-6 py-20">
         <div className="mx-auto max-w-6xl text-center">
-          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+          <p className="text-sm font-semibold text-slate-500 dark:text-slate-300">
             Loading property...
           </p>
         </div>
@@ -66,7 +66,7 @@ export function PropertyDetails() {
             Property not found
           </h1>
 
-          <p className="mt-3 text-slate-500 dark:text-slate-400">
+          <p className="mt-3 text-slate-500 dark:text-slate-300">
             This property may have been removed or is no longer available.
           </p>
 
@@ -107,7 +107,7 @@ export function PropertyDetails() {
                   ? 'bg-emerald-100 text-emerald-800'
                   : property.status === 'Pending'
                     ? 'bg-amber-100 text-amber-800'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-200'
               }`}
             >
               {property.status}
@@ -124,12 +124,12 @@ export function PropertyDetails() {
                 {property.title}
               </h1>
 
-              <p className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+              <p className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-300">
                 <MapPin size={17} className="text-gold-600" />
                 {property.location}
               </p>
 
-              <div className="my-7 flex flex-wrap gap-6 border-y border-slate-100 dark:border-slate-800 py-5 text-sm font-semibold text-slate-600 dark:text-slate-300">
+              <div className="my-7 flex flex-wrap gap-6 border-y border-slate-100 dark:border-slate-800 py-5 text-sm font-semibold text-slate-600 dark:text-slate-200">
                 {property.beds > 0 && (
                   <span className="flex items-center gap-2">
                     <BedDouble size={18} />
@@ -151,7 +151,7 @@ export function PropertyDetails() {
                 About this property
               </h2>
 
-              <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">
+              <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-200">
                 {property.description}
               </p>
             </section>
@@ -159,7 +159,7 @@ export function PropertyDetails() {
             <aside className="h-fit rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 p-6">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">
                     Asking price
                   </p>
 
@@ -179,7 +179,7 @@ export function PropertyDetails() {
                   className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border transition disabled:opacity-60 ${
                     savedIds.has(property.id)
                       ? 'border-gold-600 bg-gold-600 text-white'
-                      : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:border-gold-400 hover:text-gold-600'
+                      : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-300 hover:border-gold-400 hover:text-gold-600'
                   }`}
                 >
                   <Heart size={18} fill={savedIds.has(property.id) ? 'currentColor' : 'none'} />
@@ -203,7 +203,7 @@ export function PropertyDetails() {
                 ))}
               </div>
 
-              <p className="mt-4 text-center text-xs text-slate-500 dark:text-slate-400">
+              <p className="mt-4 text-center text-xs text-slate-500 dark:text-slate-300">
                 +254 729 711 524 · +254 736 636 363
               </p>
             </aside>

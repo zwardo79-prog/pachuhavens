@@ -25,7 +25,7 @@ function AuthShell({ title, subtitle, children }: { title: string; subtitle: str
         <div className="p-7 sm:p-10">
           <div className="md:hidden"><Link to="/" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold-600">Pachu Haven Homes Ltd</Link></div>
           <h1 className="mt-2 text-2xl font-extrabold text-forest-950 dark:text-white md:mt-0">{title}</h1>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{subtitle}</p>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">{subtitle}</p>
           <div className="mt-8">{children}</div>
         </div>
       </div>
@@ -36,9 +36,9 @@ function AuthShell({ title, subtitle, children }: { title: string; subtitle: str
 function Field({ icon, type = 'text', label, value, onChange, required = true, autoComplete }: { icon: React.ReactNode; type?: string; label: string; value: string; onChange: (value: string) => void; required?: boolean; autoComplete?: string }) {
   return (
     <label className="block">
-      <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{label}</span>
+      <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400">{label}</span>
       <div className="relative mt-2">
-        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500">{icon}</span>
+        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400">{icon}</span>
         <input type={type} value={value} required={required} autoComplete={autoComplete} onChange={(e) => onChange(e.target.value)} className="w-full rounded-xl border border-slate-200 dark:border-slate-800 py-3 pl-10 pr-3 text-sm font-medium text-slate-800 dark:text-slate-100 outline-none transition focus:border-forest-700 focus:ring-2 focus:ring-forest-100" />
       </div>
     </label>
@@ -73,7 +73,7 @@ export function LoginPage() {
         <div className="flex justify-end"><Link to="/reset" className="text-xs font-bold text-gold-700 hover:text-gold-800">Forgot password?</Link></div>
         {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
         <button disabled={busy} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-forest-800 text-sm font-bold text-white transition hover:bg-forest-700 disabled:opacity-60">{busy ? 'Signing in...' : 'Log in'} <ArrowRight size={16} /></button>
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400">New to Pachu Haven Homes Ltd? <Link to="/signup" className="font-bold text-forest-800 dark:text-forest-300 hover:text-forest-700">Create an account</Link></p>
+        <p className="text-center text-sm text-slate-500 dark:text-slate-300">New to Pachu Haven Homes Ltd? <Link to="/signup" className="font-bold text-forest-800 dark:text-forest-300 hover:text-forest-700">Create an account</Link></p>
       </form>
     </AuthShell>
   );
@@ -116,7 +116,7 @@ export function SignupPage() {
         <Field icon={<Lock size={16} />} type="password" label="Password" value={password} onChange={setPassword} autoComplete="new-password" />
         {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
         <button disabled={busy} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-forest-800 text-sm font-bold text-white transition hover:bg-forest-700 disabled:opacity-60">{busy ? 'Creating...' : 'Create account'} <ArrowRight size={16} /></button>
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400">Already have an account? <Link to="/login" className="font-bold text-forest-800 dark:text-forest-300 hover:text-forest-700">Log in</Link></p>
+        <p className="text-center text-sm text-slate-500 dark:text-slate-300">Already have an account? <Link to="/login" className="font-bold text-forest-800 dark:text-forest-300 hover:text-forest-700">Log in</Link></p>
       </form>
     </AuthShell>
   );
@@ -153,7 +153,7 @@ export function ResetPage() {
           <Field icon={<Mail size={16} />} type="email" label="Email" value={email} onChange={setEmail} autoComplete="email" />
           {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
           <button disabled={busy} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-forest-800 text-sm font-bold text-white transition hover:bg-forest-700 disabled:opacity-60">{busy ? 'Sending...' : 'Send reset link'} <ArrowRight size={16} /></button>
-          <p className="text-center text-sm text-slate-500 dark:text-slate-400"><Link to="/login" className="font-bold text-forest-800 dark:text-forest-300 hover:text-forest-700">Back to log in</Link></p>
+          <p className="text-center text-sm text-slate-500 dark:text-slate-300"><Link to="/login" className="font-bold text-forest-800 dark:text-forest-300 hover:text-forest-700">Back to log in</Link></p>
         </form>
       )}
     </AuthShell>
