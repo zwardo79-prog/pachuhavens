@@ -7,7 +7,7 @@ import logo from '@/assets/pachu-logo.png';
 function AuthShell({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
     <main className="mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl items-center px-4 py-12 sm:px-6 lg:px-8">
-      <div className="grid w-full overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl md:grid-cols-2">
+      <div className="grid w-full overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl md:grid-cols-2">
         <div className="relative hidden md:block">
           <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(2,44,34,.96),rgba(4,78,59,.82)),url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85')] bg-cover bg-center" />
           <div className="relative flex h-full flex-col justify-between p-10 text-white">
@@ -24,8 +24,8 @@ function AuthShell({ title, subtitle, children }: { title: string; subtitle: str
         </div>
         <div className="p-7 sm:p-10">
           <div className="md:hidden"><Link to="/" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold-600">Pachu Haven Homes Ltd</Link></div>
-          <h1 className="mt-2 text-2xl font-extrabold text-forest-950 md:mt-0">{title}</h1>
-          <p className="mt-2 text-sm text-slate-500">{subtitle}</p>
+          <h1 className="mt-2 text-2xl font-extrabold text-forest-950 dark:text-white md:mt-0">{title}</h1>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{subtitle}</p>
           <div className="mt-8">{children}</div>
         </div>
       </div>
@@ -36,10 +36,10 @@ function AuthShell({ title, subtitle, children }: { title: string; subtitle: str
 function Field({ icon, type = 'text', label, value, onChange, required = true, autoComplete }: { icon: React.ReactNode; type?: string; label: string; value: string; onChange: (value: string) => void; required?: boolean; autoComplete?: string }) {
   return (
     <label className="block">
-      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{label}</span>
+      <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{label}</span>
       <div className="relative mt-2">
-        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">{icon}</span>
-        <input type={type} value={value} required={required} autoComplete={autoComplete} onChange={(e) => onChange(e.target.value)} className="w-full rounded-xl border border-slate-200 py-3 pl-10 pr-3 text-sm font-medium text-slate-800 outline-none transition focus:border-forest-700 focus:ring-2 focus:ring-forest-100" />
+        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500">{icon}</span>
+        <input type={type} value={value} required={required} autoComplete={autoComplete} onChange={(e) => onChange(e.target.value)} className="w-full rounded-xl border border-slate-200 dark:border-slate-800 py-3 pl-10 pr-3 text-sm font-medium text-slate-800 dark:text-slate-100 outline-none transition focus:border-forest-700 focus:ring-2 focus:ring-forest-100" />
       </div>
     </label>
   );
@@ -73,7 +73,7 @@ export function LoginPage() {
         <div className="flex justify-end"><Link to="/reset" className="text-xs font-bold text-gold-700 hover:text-gold-800">Forgot password?</Link></div>
         {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
         <button disabled={busy} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-forest-800 text-sm font-bold text-white transition hover:bg-forest-700 disabled:opacity-60">{busy ? 'Signing in...' : 'Log in'} <ArrowRight size={16} /></button>
-        <p className="text-center text-sm text-slate-500">New to Pachu Haven Homes Ltd? <Link to="/signup" className="font-bold text-forest-800 hover:text-forest-700">Create an account</Link></p>
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400">New to Pachu Haven Homes Ltd? <Link to="/signup" className="font-bold text-forest-800 dark:text-forest-300 hover:text-forest-700">Create an account</Link></p>
       </form>
     </AuthShell>
   );
@@ -116,7 +116,7 @@ export function SignupPage() {
         <Field icon={<Lock size={16} />} type="password" label="Password" value={password} onChange={setPassword} autoComplete="new-password" />
         {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
         <button disabled={busy} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-forest-800 text-sm font-bold text-white transition hover:bg-forest-700 disabled:opacity-60">{busy ? 'Creating...' : 'Create account'} <ArrowRight size={16} /></button>
-        <p className="text-center text-sm text-slate-500">Already have an account? <Link to="/login" className="font-bold text-forest-800 hover:text-forest-700">Log in</Link></p>
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400">Already have an account? <Link to="/login" className="font-bold text-forest-800 dark:text-forest-300 hover:text-forest-700">Log in</Link></p>
       </form>
     </AuthShell>
   );
@@ -153,7 +153,7 @@ export function ResetPage() {
           <Field icon={<Mail size={16} />} type="email" label="Email" value={email} onChange={setEmail} autoComplete="email" />
           {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
           <button disabled={busy} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-forest-800 text-sm font-bold text-white transition hover:bg-forest-700 disabled:opacity-60">{busy ? 'Sending...' : 'Send reset link'} <ArrowRight size={16} /></button>
-          <p className="text-center text-sm text-slate-500"><Link to="/login" className="font-bold text-forest-800 hover:text-forest-700">Back to log in</Link></p>
+          <p className="text-center text-sm text-slate-500 dark:text-slate-400"><Link to="/login" className="font-bold text-forest-800 dark:text-forest-300 hover:text-forest-700">Back to log in</Link></p>
         </form>
       )}
     </AuthShell>

@@ -48,9 +48,9 @@ export function PropertyDetails() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-slate-50 px-6 py-20">
+      <main className="min-h-screen bg-slate-50 dark:bg-slate-800 px-6 py-20">
         <div className="mx-auto max-w-6xl text-center">
-          <p className="text-sm font-semibold text-slate-500">
+          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">
             Loading property...
           </p>
         </div>
@@ -60,13 +60,13 @@ export function PropertyDetails() {
 
   if (!property) {
     return (
-      <main className="min-h-screen bg-slate-50 px-6 py-20">
-        <div className="mx-auto max-w-2xl rounded-2xl bg-white p-10 text-center shadow-sm">
+      <main className="min-h-screen bg-slate-50 dark:bg-slate-800 px-6 py-20">
+        <div className="mx-auto max-w-2xl rounded-2xl bg-white dark:bg-slate-900 p-10 text-center shadow-sm">
           <h1 className="text-2xl font-extrabold text-slate-900">
             Property not found
           </h1>
 
-          <p className="mt-3 text-slate-500">
+          <p className="mt-3 text-slate-500 dark:text-slate-400">
             This property may have been removed or is no longer available.
           </p>
 
@@ -83,17 +83,17 @@ export function PropertyDetails() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-800">
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <Link
           to="/properties"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-forest-900 hover:text-gold-600"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-forest-900 dark:text-white hover:text-gold-600"
         >
           <ArrowLeft size={16} />
           Back to properties
         </Link>
 
-        <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
+        <div className="overflow-hidden rounded-3xl bg-white dark:bg-slate-900 shadow-sm">
           <div className="relative aspect-[16/8] overflow-hidden">
             <img
               src={property.image_url || fallbackImage}
@@ -107,7 +107,7 @@ export function PropertyDetails() {
                   ? 'bg-emerald-100 text-emerald-800'
                   : property.status === 'Pending'
                     ? 'bg-amber-100 text-amber-800'
-                    : 'bg-slate-100 text-slate-600'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
               }`}
             >
               {property.status}
@@ -124,12 +124,12 @@ export function PropertyDetails() {
                 {property.title}
               </h1>
 
-              <p className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-500">
+              <p className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400">
                 <MapPin size={17} className="text-gold-600" />
                 {property.location}
               </p>
 
-              <div className="my-7 flex flex-wrap gap-6 border-y border-slate-100 py-5 text-sm font-semibold text-slate-600">
+              <div className="my-7 flex flex-wrap gap-6 border-y border-slate-100 dark:border-slate-800 py-5 text-sm font-semibold text-slate-600 dark:text-slate-300">
                 {property.beds > 0 && (
                   <span className="flex items-center gap-2">
                     <BedDouble size={18} />
@@ -151,19 +151,19 @@ export function PropertyDetails() {
                 About this property
               </h2>
 
-              <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600">
+              <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">
                 {property.description}
               </p>
             </section>
 
-            <aside className="h-fit rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <aside className="h-fit rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 p-6">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     Asking price
                   </p>
 
-                  <p className="mt-2 text-2xl font-extrabold text-forest-900">
+                  <p className="mt-2 text-2xl font-extrabold text-forest-900 dark:text-white">
                     {money.format(property.price)}
                   </p>
                 </div>
@@ -179,7 +179,7 @@ export function PropertyDetails() {
                   className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border transition disabled:opacity-60 ${
                     savedIds.has(property.id)
                       ? 'border-gold-600 bg-gold-600 text-white'
-                      : 'border-slate-200 bg-white text-slate-500 hover:border-gold-400 hover:text-gold-600'
+                      : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:border-gold-400 hover:text-gold-600'
                   }`}
                 >
                   <Heart size={18} fill={savedIds.has(property.id) ? 'currentColor' : 'none'} />
@@ -203,7 +203,7 @@ export function PropertyDetails() {
                 ))}
               </div>
 
-              <p className="mt-4 text-center text-xs text-slate-500">
+              <p className="mt-4 text-center text-xs text-slate-500 dark:text-slate-400">
                 +254 729 711 524 · +254 736 636 363
               </p>
             </aside>
