@@ -72,7 +72,7 @@ export function PropertyCard({
           {property.status}
         </span>
 
-        <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-bold text-slate-600 dark:text-slate-200 backdrop-blur-sm">
+        <span className="absolute right-4 top-4 rounded-full bg-white/90 dark:bg-slate-900/90 px-3 py-1.5 text-[11px] font-bold text-slate-600 dark:text-slate-200 backdrop-blur-sm">
           {property.category}
         </span>
 
@@ -84,7 +84,7 @@ export function PropertyCard({
             className={`absolute bottom-4 right-4 grid h-10 w-10 place-items-center rounded-full backdrop-blur-md transition disabled:opacity-60 ${
               saved
                 ? 'bg-gold-600 text-white'
-                : 'bg-white/90 text-slate-600 dark:text-slate-200 hover:bg-white hover:text-gold-600'
+                : 'bg-white/90 dark:bg-slate-900/90 text-slate-600 dark:text-slate-200 hover:bg-white hover:text-gold-600 dark:hover:bg-slate-800'
             }`}
           >
             <Heart size={18} fill={saved ? 'currentColor' : 'none'} />
